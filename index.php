@@ -3,7 +3,7 @@ include 'server.php';
 include 'partials/header.php';
 ?>
 
-<body>
+
 
   <div class="container">
     <div class="row">
@@ -22,10 +22,10 @@ include 'partials/header.php';
           </thead>
           <tbody>
             <?php
-            // Se ci sono record
-            if (!empty($rooms)) {
+            // Se ci sono record - Senza funzione results = rooms
+            if (!empty($results)) {
               // Per ogni record stampa una riga di tabella html
-              foreach ($rooms as $room) { ?>
+              foreach ($results as $room) { ?>
                 <tr>
                   <!-- Prendi l'ID -->
                   <td><?php echo $room['id'] ?></td>

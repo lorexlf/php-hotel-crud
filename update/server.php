@@ -1,6 +1,7 @@
 <?php
    include_once __DIR__ .'/../env.php';
    include __DIR__ .'/../database.php';
+   include __DIR__ .'/../functions.php';
 
    if(empty($_POST['id'])) {
       die('ID non trovato');
@@ -21,40 +22,51 @@
    $beds = $_POST['beds'];
    $floor = $_POST['floor'];
 
-   // Query per il record dell'ID
-   $sql = "SELECT * FROM `stanze` WHERE id = $roomId";
-   $result = $conn->query($sql);
-
-   if ($result && $result->num_rows > 0) { 
-      $room = $result->fetch_assoc();
-   } 
-   else {
-      die('ID non esistente');
-   }
-
-   // Query UPDATE con i nuovi valori
-   
-   // $sql = "UPDATE `stanze` SET `room_number` = $roomNumber, `beds` = $beds, `floor` = $floor, `updated_at` = NOW() WHERE id = $roomId";
-   
-   $sql = "UPDATE `stanze` SET `room_number` = ?, `beds` = ?, `floor` = ?, `updated_at` = NOW() WHERE id = ?";
-   
+   // // Query per il record dell'ID
+   // $sql = "SELECT * FROM `stanze` WHERE id = $roomId";
    // $result = $conn->query($sql);
 
-   $stmt = $conn->prepare($sql);
-   $stmt->bind_param("iiii", $roomNumber, $beds, $floor, $roomId);
-   $stmt->execute();
-
-   // Una volta inserito l'UPDATE riportami alla pagina show della stanza
-  
-   // if($result) {
-   //    header("Location: $basePath/show/show.php?id=$roomId");
+   // if ($result && $result->num_rows > 0) { 
+   //    $room = $result->fetch_assoc();
    // } 
    // else {
-   //    echo 'Errore durante l\'aggiornamento della stanza';
+   //    die('ID non esistente');
    // }
 
-   if ($stmt->affected_rows > 0) {
-      header("Location: $basePath/show/show.php?id=$roomId");
-   } else {
-      echo 'Errore durante l\'aggiornamento della stanza';
+   $result = getById($conn, 'stanze', $roomId);
+
+   if (count($result) > 0) {
+      // Query UPDATE con i nuovi valori
+   
+      // $sql = "UPDATE `stanze` SET `room_number` = $roomNumber, `beds` = $beds, `floor` = $floor, `updated_at` = NOW() WHERE id = $roomId";
+      
+      $sql = "UPDATE `stanze` SET `room_number` = ?, `beds` = ?, `floor` = ?, `updated_at` = NOW() WHERE id = ?";
+      
+      // $result = $conn->query($sql);
+
+      $stmt = $conn->prepare($sql);
+      $stmt->bind_param("iiii", $roomNumber, $beds, $floor, $roomId);
+      $stmt->execute();
+
+      $conn->close();
+
+      // Una volta inserito l'UPDATE riportami alla pagina show della stanza
+   
+      // if($result) {
+      //    header("Location: $basePath/show/show.php?id=$roomId");
+      // } 
+      // else {
+      //    echo 'Errore durante l\'aggiornamento della stanza';
+      // }
+
+      if ($stmt->affected_rows > 0) {
+         header("Location: $basePath/show/show.php?id=$roomId");
+      } else {
+         echo 'Errore durante l\'aggiornamento della stanza';
+      }
    }
+   else {
+      die('La stanza non esiste');
+   }
+
+   

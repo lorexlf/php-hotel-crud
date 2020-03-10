@@ -5,8 +5,8 @@ function getAll($conn, $table) {
     $result = $conn->query($sql);
 
     if ($result && $result->num_rows > 0) { 
-    $results = [];
-    while($row = $result->fetch_assoc()) {
+        $results = [];
+        while($row = $result->fetch_assoc()) {
         $results[] = $row;
       }
     } 
@@ -20,6 +20,7 @@ function getAll($conn, $table) {
     $conn->close();
     return $results;
 }
+
 
 function getById($conn, $table, $id)  {
     $sql = "SELECT * FROM `$table` WHERE id = '$id'";
@@ -36,7 +37,5 @@ function getById($conn, $table, $id)  {
         $result = false;
     }
     return $result;
-
-    $conn->close();
-
+    
 }
