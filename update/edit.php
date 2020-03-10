@@ -1,21 +1,25 @@
 <?php
-   include __DIR__ . '/../database.php';
-   include __DIR__ . '/../partials/header.php';
+    // Includo il database
+    include __DIR__ . '/../database.php';
+    // Includo l'header
+    include __DIR__ . '/../partials/header.php';
 
-   if(!empty($_GET['id'])) {
-      $roomId = $_GET['id'];
-  }
+    // Se è presente l'ID nell'indirizzo
+    if(!empty($_GET['id'])) {
+        // Creao la variabile con l'ID nell'indirizzo
+        $roomId = $_GET['id'];
+    }
 
-   $sql = "SELECT * FROM `stanze` WHERE id = $roomId";
+    // Query record dell'ID nell'Indirizzo
+    $sql = "SELECT * FROM `stanze` WHERE id = $roomId";
+    $result = $conn->query($sql);
 
-   $result = $conn->query($sql);
-
-   if ($result && $result->num_rows > 0) { 
-      $room = $result->fetch_assoc();
-      } 
-      else {
-          die('ID non esistente');
-      }
+    if ($result && $result->num_rows > 0) { 
+        $room = $result->fetch_assoc();
+    } 
+    else {
+        die('ID non esistente');
+    }
   
 ?> 
 

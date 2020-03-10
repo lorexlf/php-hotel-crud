@@ -15,15 +15,15 @@
          die('Numero camera non trovato');
    }
   
-
+   // Salvo come variabili i valori dei $_POST recuperati da edit.php
    $roomId = $_POST['id'];
    $roomNumber = $_POST['room_number'];
    $beds = $_POST['beds'];
    $floor = $_POST['floor'];
 
+   // Query per il record dell'ID
    $sql = "SELECT * FROM `stanze` WHERE id = $roomId";
    $result = $conn->query($sql);
-
 
    if ($result && $result->num_rows > 0) { 
       $room = $result->fetch_assoc();
@@ -32,13 +32,29 @@
       die('ID non esistente');
    }
 
-   $sql = "UPDATE `stanze` SET `room_number` = $roomNumber, `beds` = $beds, `floor` = $floor, `updated_at` = NOW() WHERE id = $roomId";
+   // Query UPDATE con i nuovi valori
+   
+   // $sql = "UPDATE `stanze` SET `room_number` = $roomNumber, `beds` = $beds, `floor` = $floor, `updated_at` = NOW() WHERE id = $roomId";
+   
+   $sql = "UPDATE `stanze` SET `room_number` = ?, `beds` = ?, `floor` = ?, `updated_at` = NOW() WHERE id = ?";
+   
+   // $result = $conn->query($sql);
 
-   $result = $conn->query($sql);
+   $stmt = $conn->prepare($sql);
+   $stmt->bind_param("iiii", $roomNumber, $beds, $floor, $roomId);
+   $stmt->execute();
 
-   if($result) {
+   // Una volta inserito l'UPDATE riportami alla pagina show della stanza
+  
+   // if($result) {
+   //    header("Location: $basePath/show/show.php?id=$roomId");
+   // } 
+   // else {
+   //    echo 'Errore durante l\'aggiornamento della stanza';
+   // }
+
+   if ($stmt->affected_rows > 0) {
       header("Location: $basePath/show/show.php?id=$roomId");
-   } 
-   else {
-      echo 'KO';
+   } else {
+      echo 'Errore durante l\'aggiornamento della stanza';
    }
