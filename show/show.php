@@ -1,4 +1,5 @@
 <?php
+include 'server.php';
 include __DIR__ . '/../partials/header.php';
 ?>
 
@@ -8,9 +9,6 @@ include __DIR__ . '/../partials/header.php';
       <div class="col-12">
         <div class="card">
           <ul>
-            <?php
-            include  'server.php';
-            ?>
             <li>Id: <?php echo $room['id'] ?></li>
             <li>Floor: <?php echo $room['floor'] ?></li>
             <li>Room Number <?php echo $room['room_number'] ?></li>
